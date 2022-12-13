@@ -6,6 +6,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Logo from './components/Logo/Logo';
 import Navigation from './components/Navigation/Navigation';
 import Rank from './components/Rank/Rank';
+import SignIn from './components/SignIn/SignIn';
 import './App.css';
 
 const USER_ID = '9xt50svmnbug';
@@ -13,7 +14,6 @@ const PAT = '91b5f5e9ecc445f7a0bd7b2dfb098eef';
 const APP_ID = 'd4e719391122444995eb898c87a7f098';
 const MODEL_ID = 'face-detection';
 const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105'; 
-// const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
 
 const particlesOptions = {
   particles: {
@@ -34,6 +34,7 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: {},
+      route: "signin"
     }
   }
 
@@ -96,6 +97,11 @@ class App extends Component {
         })
         .catch(error => console.log('error', error));
   }
+
+  onRouteChange = (route) => {
+    this.setState({route: route});
+  }
+
   render() {
     return (
       <div className="App">
@@ -105,11 +111,16 @@ class App extends Component {
           }}
           
         />
-        <Navigation />
-         <Logo />
-         <Rank />
-        <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
-        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+        <Navigation onRouteChange={this.onRouteChange} />
+        { this.state.route === "signin" 
+          ? <SignIn onRouteChange={this.onRouteChange} />
+          : <div>
+              <Logo />
+              <Rank />
+              <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
+              <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+            </div>
+        } 
       </div>
     )
   }
